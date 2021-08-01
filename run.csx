@@ -39,7 +39,8 @@ public static async Task Run(TimerInfo myTimer, ILogger log)
             log.LogInformation($"{interval.TotalMilliseconds} interval");
 
             HttpClient _httpClient = new HttpClient();
-            _httpClient.BaseAddress = new Uri("https://insights-collector.newrelic.com");
+            string nrEndpoint = Environment.GetEnvironmentVariable("NR_ENDPOINT");
+            _httpClient.BaseAddress = new Uri(nrEndpoint);
             _httpClient.DefaultRequestHeaders.Accept.Clear();
             _httpClient.DefaultRequestHeaders.Add("X-Insert-Key", Environment.GetEnvironmentVariable("NR_INSERT_KEY"));
         
@@ -47,7 +48,7 @@ public static async Task Run(TimerInfo myTimer, ILogger log)
             HttpContent httpContent = new StringContent(telemetry, Encoding.UTF8);
             httpContent.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             
-            string nrAccount = Environment.GetEnvironmentVariable("NR_ACCOUNT");
+            string nrAccount = Environment.GetEnvironmentVariable("NR_ACCOUNT_ID");
             string ingestPath = "/v1/accounts/"+nrAccount+"/events";
             var response = await _httpClient.PostAsync(ingestPath, httpContent);
             bool isSuccess = false;
