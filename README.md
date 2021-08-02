@@ -1,4 +1,4 @@
-# New Relic Azure SQL SLA Check
+# New Relic Azure SQL Availability Check
 
 ## Application settings
 * SQLDB_CONNECTION: Azure SQL connection string
