@@ -17,17 +17,14 @@ public static async Task Run(TimerInfo myTimer, ILogger log)
     using (SqlConnection conn = new SqlConnection(str))
     {
         conn.Open();
-        //var text = "UPDATE SalesLT.SalesOrderHeader " +
-        //        "SET [Status] = 5  WHERE ShipDate < GetDate();";
+
         var text = Environment.GetEnvironmentVariable("SQLDB_QUERY");
         
         using (SqlCommand cmd = new SqlCommand(text, conn))
         {
             // Execute the command and log the # rows affected.
-            //var rows = await cmd.ExecuteNonQueryAsync();
             DateTime start = new DateTime();
             var reader = await cmd.ExecuteReaderAsync();
-            //log.LogInformation($"{rows} rows were updated");
             int counter = 0;  
             while (reader.Read())
             {
